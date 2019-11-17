@@ -22,13 +22,13 @@ class Node
       @next_node.pop(self)
     end
   end
-  def reverse(node, previous_node)
-    next_node = node.next_node
-    node.next_node = previous_node
-    if next_node
-      reverse(next_node, node)
+
+  def show(node)
+    if node.next_node.nil?
+      print "#{node.value} -> nil\n"
     else
-      return node
+      print "#{node.value} -> "
+      node.show(node.next_node)
     end
   end
 end
@@ -38,6 +38,10 @@ class LinkedList
     @head = Node.new(value)
   end
 
+  def get
+    @head
+  end
+
   def add(value)
     @head.add(value)
   end
@@ -45,31 +49,35 @@ class LinkedList
   def pop
     @head.pop(@head)
   end
+
+  def last_node
+    last = @head
+    while !last.next_node.nil?
+      last = last.next_node
+    end
+    last
+  end
+
+  def show
+    @head.show(@head)
+  end
 end
 
-class Stack
-    attr_reader :data
-
-    def initialize
-        @list = nil
-    end
-
-    def push(value)
-        if @list.nil?
-          @list = LinkedList.new(value)
-        else
-          @list.add(value)
-        end
-    end
-
-    def pop
-      @list.pop
-    end
-
+def reverse(node, previous_node)
+  next_node = node.next_node
+  node.next_node = previous_node
+  if next_node
+    reverse(next_node, node)
+  else
+    return node
+  end
 end
 
-s = Stack.new
-s.push(1)
-s.push(2)
-puts s.pop
-puts s.pop
+list = LinkedList.new(0)
+list.add(1)
+list.add(2)
+list.add(3)
+list.show
+
+new_list = reverse(list.get, nil)
+new_list.show(new_list)
